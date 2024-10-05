@@ -1,0 +1,134 @@
+# Node.js dependencies
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment Variables (Sensitive Data)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS-specific system files (Mac and Linux)
+.DS_Store
+Thumbs.db
+*.swp
+
+# Optional npm cache directory
+.npm/
+.npmrc
+
+# Optional yarn cache directory
+.yarn/
+.yarnrc
+
+# Build directories
+dist/
+build/
+out/
+tmp/
+temp/
+
+# Testing directories and files
+coverage/
+*.lcov
+
+# Babel cache
+.cache/
+.babelrc
+
+# TypeScript build files
+*.tsbuildinfo
+
+# IDEs and editors settings
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# eslint cache
+.eslintcache
+
+# Parcel, Webpack, or other bundler output
+.cache/
+.parcel-cache/
+.webpack/
+
+# Static files (optional, depending on project)
+# public/
+# static/
+
+# Secrets and API keys
+*.key
+*.pem
+*.cert
+*.pfx
+*.json     # API keys (like Firebase or service account credentials)
+
+# SSL certificate files
+ssl/
+*.crt
+*.csr
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Docker-related files
+docker-compose.override.yml
+docker-compose.override.env
+.dockerignore
+
+# Firebase and Google Cloud keys
+firebase.json
+firestore.indexes.json
+firestore.rules
+storage.rules
+.serviceAccountKey.json
+firebase-debug.log
+
+# AWS credential and config files
+.aws/
+aws-exports.js
+
+# Heroku
+.heroku/
+
+# CI/CD config files with sensitive data
+.travis.yml
+.circleci/
+.gitlab-ci.yml
+.github/workflows/
+
+# Miscellaneous temporary or backup files
+*.bak
+*.swp
+*.tmp
+*.backup
+*.orig
+
+# Python virtual environment (if any Python scripts are used)
+venv/
+__pycache__/
+
+# Sentry or error reporting services
+.sentryclirc
+
+# Composer (if PHP is used in the project)
+composer.lock
+vendor/
+
+# Local environment config (specific to OS or developer machine)
+.local/
+
+# Security keys for SSH, GPG, or other sensitive authentication methods
+*.pub
+*.key
+*.gpg
+*.asc
