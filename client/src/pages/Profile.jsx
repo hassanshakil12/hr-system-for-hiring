@@ -4,7 +4,6 @@ import { Navbar } from "../components";
 const Profile = () => {
   return (
     <>
-      <Navbar />
       <div>Profile</div>
     </>
   );
