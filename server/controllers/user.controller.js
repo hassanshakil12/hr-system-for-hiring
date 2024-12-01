@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken"
 import User from "../models/user.model.js";
 
 const getUser = (req, res) => {
@@ -41,4 +42,47 @@ const registerUser = async (req, res) => {
   }
 };
 
-export { getUser, registerUser };
+
+const SignInUser = async (req, res) => {
+  const { email, password } = req.body;
+  const Model = User;
+  const errMsg = "Login Failed!!! Email/Passwoord is incorrect..."
+
+  try {
+    const user = await Model.findOne({ email });
+    if (!user) {
+      return res.status(403).json({
+        message: errMsg,
+        success: false,
+      });
+    }
+
+    const isPasswordEqual = await bcrypt.compare(password, user.password)
+    if(!isPasswordEqual){
+      return res.status(403).json({
+        message: errMsg,
+        success: false
+      })
+    }
+
+    const jwtToken = jwt.sign(
+      {email: user.email, _id: user._id},
+      process.env.JWT_SERCET,
+      {expiresIn: "24h"}
+    )
+
+    res
+      .status(201)
+      .json({ 
+        message: `Login Successful`, 
+        success: true,
+        jwtToken,
+        email,
+        username: user.username
+       });
+  } catch (error) {
+    res.status(500).json({ message: error.message, success: false });
+  }
+};
+
+export { getUser, registerUser, SignInUser };
