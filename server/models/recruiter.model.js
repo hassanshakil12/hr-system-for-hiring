@@ -5,8 +5,8 @@ const recruiterSchema = new mongoose.Schema(
     entityType: {
       type: String,
       required: true,
-      enum: ["recruiter"],
       default: "recruiter",
+      immutable: true,
     },
     username: {
       type: String,

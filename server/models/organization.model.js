@@ -5,8 +5,8 @@ const organizationSchema = new mongoose.Schema(
     entityType: {
       type: String,
       required: true,
-      enum: ["organization"],
       default: "organization",
+      immutable: true
     },
     username: {
       type: String,

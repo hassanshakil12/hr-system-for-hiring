@@ -1,24 +1,5 @@
 import bcrypt from "bcrypt";
-
 import User from "../models/user.model.js";
-import Recruiter from "../models/recruiter.model.js";
-import Organization from "../models/organization.model.js";
-
-const getModel = (entityType) => {
-  switch (entityType) {
-    case "user":
-      return User;
-
-    case "recruiter":
-      return Recruiter;
-
-    case "organization":
-      return Organization;
-
-    default:
-      throw new Error("Invalid Entity Type");
-  }
-};
 
 const getUser = (req, res) => {
   try {
@@ -31,22 +12,22 @@ const getUser = (req, res) => {
 };
 
 const registerUser = async (req, res) => {
-  const { entityType, username, email, password } = req.body;
-  const Model = getModel(entityType);
+  const { username, email, password } = req.body;
+  const Model = User;
 
   try {
-    const existingEntity = await Model.findOne({ email });
+    const existingUser = await Model.findOne({ email });
 
-    if (existingEntity) {
-      return res.status(400).json({
-        Message: `${entityType} already exists with the give email!!!`,
+    if (existingUser) {
+      return res.status(409).json({
+        message: `${existingUser.username} already exists with the give email!!!`,
+        success: false,
       });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
-    const newEntity = await Model.create({
-      entityType: entityType,
+    const newUser = await Model.create({
       username: username,
       email: email,
       password: hashedPassword,
@@ -54,9 +35,9 @@ const registerUser = async (req, res) => {
 
     res
       .status(201)
-      .json({ Message: `${entityType} Registered Successfully ${newEntity}` });
+      .json({ message: `Registeration Successful ${newUser}`, success: true });
   } catch (error) {
-    res.status(500).json({ Message: error.message });
+    res.status(500).json({ message: error.message, success: false });
   }
 };
 
