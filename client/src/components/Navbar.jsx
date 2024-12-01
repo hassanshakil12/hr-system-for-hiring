@@ -5,14 +5,23 @@ const Navbar = () => {
   return (
     <>
       <h1>Navbar</h1>
-      <h3>
+      <span>
         <Link to={"/"}>Home</Link>
-      </h3>
-      <h3>
+      </span>
+      <span>
+        <Link to={"/feed"}>Feed</Link>
+      </span>
+      <span>
+        <Link to={"/search"}>Search</Link>
+      </span>
+      <span>
         <Link to={"/profile"}>Profile</Link>
-      </h3>
+      </span>
+      <span>
+        <Link to={"/settings"}>Settings</Link>
+      </span>
     </>
   );
 };
 
-export default Navbar;
+export default Navbar; 
