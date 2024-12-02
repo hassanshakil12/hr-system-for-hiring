@@ -3,12 +3,14 @@ import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
 import compression from "compression";
+import dotenv from "dotenv"
 // import rateLimit from "express-rate-limit";
 
 import userRoutes from "./routes/user.routes.js";
 
 const app = express();
 
+dotenv.config()
 app.use(express.json());
 app.use(helmet());
 app.use(compression());

@@ -4,11 +4,11 @@ import User from "../models/user.model.js";
 
 const getUser = (req, res) => {
   try {
-    console.log("Hello World");
-    res.status(200).json({ Message: "All good" });
+    console.log("Hello World", req.user);
+    res.status(200).json({ message: `All good` });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ Message: "Server Not Responding" });
+    res.status(500).json({ message: "Server Not Responding" });
   }
 };
 
@@ -64,12 +64,20 @@ const SignInUser = async (req, res) => {
         success: false
       })
     }
+    const JWTSecret = process.env.JWT_SECRET || "localhost";
 
     const jwtToken = jwt.sign(
-      {email: user.email, _id: user._id},
-      process.env.JWT_SERCET,
-      {expiresIn: "24h"}
-    )
+      {
+        username: user.username,
+        email: user.email,
+        _id: user._id,
+        entityType: user.entityType,
+      },
+      JWTSecret,
+      {
+        expiresIn: "24h",
+      }
+    );
 
     res
       .status(201)
@@ -77,8 +85,10 @@ const SignInUser = async (req, res) => {
         message: `Login Successful`, 
         success: true,
         jwtToken,
+        _id: user._id,
         email,
-        username: user.username
+        username: user.username,
+        entityType: user.entityType
        });
   } catch (error) {
     res.status(500).json({ message: error.message, success: false });
