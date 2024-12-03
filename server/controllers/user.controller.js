@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
+import { generateOtp, saveOtp, verifyOtp } from "../utils/otpHelper.js";
+import sendMail from "../utils/emailHelper.js";
 
 const getUser = (req, res) => {
   try {
@@ -42,11 +44,10 @@ const registerUser = async (req, res) => {
   }
 };
 
-
 const SignInUser = async (req, res) => {
   const { email, password } = req.body;
   const Model = User;
-  const errMsg = "Login Failed!!! Email/Passwoord is incorrect..."
+  const errMsg = "Login Failed!!! Email/Password is incorrect...";
 
   try {
     const user = await Model.findOne({ email });
@@ -57,12 +58,12 @@ const SignInUser = async (req, res) => {
       });
     }
 
-    const isPasswordEqual = await bcrypt.compare(password, user.password)
-    if(!isPasswordEqual){
+    const isPasswordEqual = await bcrypt.compare(password, user.password);
+    if (!isPasswordEqual) {
       return res.status(403).json({
         message: errMsg,
-        success: false
-      })
+        success: false,
+      });
     }
     const JWTSecret = process.env.JWT_SECRET || "localhost";
 
@@ -79,20 +80,34 @@ const SignInUser = async (req, res) => {
       }
     );
 
-    res
-      .status(201)
-      .json({ 
-        message: `Login Successful`, 
-        success: true,
-        jwtToken,
-        _id: user._id,
-        email,
-        username: user.username,
-        entityType: user.entityType
-       });
+    res.status(201).json({
+      message: `Login Successful`,
+      success: true,
+      jwtToken,
+      _id: user._id,
+      email,
+      username: user.username,
+      entityType: user.entityType,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message, success: false });
   }
 };
 
-export { getUser, registerUser, SignInUser };
+const sendEmailOtp = async (req, res) => {
+  const { email, entityType } = req.body;
+
+  try {
+    const otp = generateOtp();
+    await saveOtp(email, otp, entityType);
+    sendMail(email, "Email verification OTP", `Your OTP is: ${otp}`);
+
+    return res
+      .status(200)
+      .json({ message: `OTP sent successfully`, success: true });
+  } catch (error) {
+    res.status(500).json({ message: error.message, success: false });
+  }
+};
+
+export { getUser, registerUser, SignInUser, sendEmailOtp };
