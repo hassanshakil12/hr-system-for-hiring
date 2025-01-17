@@ -1,12 +1,11 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema(
+const candidateSchema = new mongoose.Schema(
   {
     entityType: {
       type: String,
-      required: true,
-      default: "user",
-      immutable: true
+      default: "candidate",
+      immutable: true,
     },
     username: {
       type: String,
@@ -22,12 +21,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    isVerified: {
-      type: boolean,
-      default: false
-    }
   },
   { timestamps: true }
 );
 
-export default mongoose.model("User", userSchema);
+export default mongoose.model("Candidate", candidateSchema);

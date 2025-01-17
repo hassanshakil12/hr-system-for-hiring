@@ -29,7 +29,7 @@ const verifyOtp = async (email, otp, entityType) => {
       return { success: false, message: "Invalid OTP" };
     }
 
-    await OTP.deleteOne({ email });
+    await OTP.isVerified({ email });
     await OTP.save();
     return { success: true, message: "OTP Successfully Verified" };
   } catch (err) {

@@ -1,27 +1,98 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import "./css/components.css";
+import { NavLink } from "react-router-dom";
+import { RxDashboard } from "react-icons/rx";
+import { MdWorkOutline } from "react-icons/md";
+import { MdPayment } from "react-icons/md";
+import { MdOutlineCreateNewFolder } from "react-icons/md";
+import { FiInbox } from "react-icons/fi";
+import { PiOfficeChairBold } from "react-icons/pi";
 
 const Navbar = () => {
   return (
     <>
-      <h1>Navbar</h1>
-      <span>
-        <Link to={"/"}>Home</Link>
-      </span>
-      <span>
-        <Link to={"/feed"}>Feed</Link>
-      </span>
-      <span>
-        <Link to={"/search"}>Search</Link>
-      </span>
-      <span>
-        <Link to={"/profile"}>Profile</Link>
-      </span>
-      <span>
-        <Link to={"/settings"}>Settings</Link>
-      </span>
+      <nav>
+        <div className="navbar-layout">
+          <div className="navbar-container">
+            <div className="navbar-menu">
+              <div className="navbar-logo">
+                <img src="" alt="logo" loading="lazy" />
+                <h2>ProCruiter</h2>
+              </div>
+
+              <div className="navbar-main-menu">
+                <h2>Main Menu</h2>
+                <ul>
+                  <li>
+                    <NavLink to={"/dashboard"}>
+                      <i>
+                        <RxDashboard />
+                      </i>
+                      <p>Dashboard</p>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={""}>
+                      <i>
+                        <MdWorkOutline />
+                      </i>
+                      <p>Jobs</p>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={""}>
+                      <i>
+                        <MdPayment />
+                      </i>
+                      <p>Payment</p>
+                    </NavLink>
+                  </li>
+                </ul>
+              </div>
+
+              <hr />
+
+              <div className="navbar-secondary-menu">
+                <h2>Recruitment</h2>
+                <ul>
+                  <li>
+                    <NavLink to={""}>
+                      <i>
+                        <MdOutlineCreateNewFolder />
+                      </i>
+                      <p>Create Job</p>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={""}>
+                      <i>
+                        <FiInbox />
+                      </i>
+                      <p>Application Hub</p>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to={""}>
+                      <i>
+                        <PiOfficeChairBold />
+                      </i>
+                      <p>Interviews</p>
+                    </NavLink>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="navbar-help">
+              <h2>
+                <NavLink to={""}>Need Help?</NavLink>
+              </h2>
+            </div>
+          </div>
+        </div>
+      </nav>
     </>
   );
 };
 
-export default Navbar; 
+export default Navbar;

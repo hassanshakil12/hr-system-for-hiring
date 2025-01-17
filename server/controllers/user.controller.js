@@ -1,8 +1,23 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import User from "../models/user.model.js";
+import Candidate from "../models/candidate.model.js";
+import Recruiter from "../models/recruiter.model.js";
+import Organization from "../models/organization.model.js";
 import { generateOtp, saveOtp, verifyOtp } from "../utils/otpHelper.js";
 import sendMail from "../utils/emailHelper.js";
+
+const getModel = (entityType) => {
+  switch (entityType) {
+    case "candidate":
+      return Candidate;
+    case "recruiter":
+      return Recruiter;
+    case "organization":
+      return Organization;
+    default:
+      return null;
+  }
+};
 
 const getUser = (req, res) => {
   try {
@@ -15,8 +30,14 @@ const getUser = (req, res) => {
 };
 
 const registerUser = async (req, res) => {
-  const { username, email, password } = req.body;
-  const Model = User;
+  const { entityType, username, email, password } = req.body;
+  const Model = getModel(entityType);
+
+  if (!Model) {
+    return res
+      .status(404)
+      .json({ message: "Invalid Entity Type", success: false });
+  }
 
   try {
     const existingUser = await Model.findOne({ email });
@@ -45,8 +66,9 @@ const registerUser = async (req, res) => {
 };
 
 const SignInUser = async (req, res) => {
-  const { email, password } = req.body;
-  const Model = User;
+  const { email, password, entityType } = req.body;
+  // const Model = User;
+  const Model = getModel(entityType);
   const errMsg = "Login Failed!!! Email/Password is incorrect...";
 
   try {
@@ -94,6 +116,24 @@ const SignInUser = async (req, res) => {
   }
 };
 
+const logoutUser = async (req, res) => {
+  try {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error(err);
+        return res
+          .status(500)
+          .json({ message: "Logout failed!", success: false });
+      }
+      
+      res.clearCookie("connect.sid");
+      res.status(200).json({ message: "Logout successful!", success: true });
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message, success: false });
+  }
+};
+
 const sendEmailOtp = async (req, res) => {
   const { email, entityType } = req.body;
 
@@ -110,4 +150,4 @@ const sendEmailOtp = async (req, res) => {
   }
 };
 
-export { getUser, registerUser, SignInUser, sendEmailOtp };
+export { getUser, registerUser, SignInUser, logoutUser, sendEmailOtp };

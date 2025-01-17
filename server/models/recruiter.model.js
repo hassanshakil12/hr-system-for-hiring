@@ -4,7 +4,6 @@ const recruiterSchema = new mongoose.Schema(
   {
     entityType: {
       type: String,
-      required: true,
       default: "recruiter",
       immutable: true,
     },

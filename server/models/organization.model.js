@@ -4,7 +4,6 @@ const organizationSchema = new mongoose.Schema(
   {
     entityType: {
       type: String,
-      required: true,
       default: "organization",
       immutable: true
     },
