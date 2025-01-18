@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 // import rateLimit from "express-rate-limit";
 
 import authRoutes from "./routes/auth.routes.js";
+import organizationRoutes from "./routes/organization.routes.js";
 
 const app = express();
 
@@ -31,5 +32,6 @@ app.use(
 // app.use(limiter);
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/organization", organizationRoutes);
 
 export default app;

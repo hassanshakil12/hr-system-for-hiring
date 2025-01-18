@@ -5,7 +5,7 @@ import {
   SignInUser,
   logoutUser,
   sendEmailOtp,
-} from "../controllers/user.controller.js";
+} from "../controllers/auth.controller.js";
 import {
   signUpValidation,
   signInValidation,
