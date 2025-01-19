@@ -5,13 +5,17 @@ import helmet from "helmet";
 import compression from "compression";
 import dotenv from "dotenv";
 // import rateLimit from "express-rate-limit";
+import { UPLOAD_DIR } from "./config/static.config.js";
 
 import authRoutes from "./routes/auth.routes.js";
 import organizationRoutes from "./routes/organization.routes.js";
+import candidateRoutes from "./routes/candidate.routes.js";
 
 const app = express();
 
 dotenv.config();
+
+app.use("/uploads", express.static(UPLOAD_DIR));
 app.use(express.json());
 app.use(helmet());
 app.use(compression());
@@ -32,6 +36,7 @@ app.use(
 // app.use(limiter);
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/candidate", candidateRoutes);
 app.use("/api/v1/organization", organizationRoutes);
 
 export default app;
