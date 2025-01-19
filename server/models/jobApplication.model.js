@@ -12,6 +12,11 @@ const jobApplicationSchema = new mongoose.Schema(
       ref: "Candidate",
       required: true,
     },
+    organization: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Organization",
+      required: true,
+    },
     cv: {
       type: String,
       required: true,

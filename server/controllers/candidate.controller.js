@@ -16,6 +16,10 @@ export const getJobs = async (req, res) => {
       .populate("organization", "username email")
       .sort({ createdAt: -1 });
 
+    if (!jobs || jobs.length === 0) {
+      return res.status(400).json({ message: "No jobs found", success: false });
+    }
+
     res.status(200).json({ jobs, success: true });
   } catch (error) {
     res.status(500).json({ message: error.message, success: false });
@@ -43,7 +47,7 @@ export const applyForJob = async (req, res) => {
   const { job, coverLetter } = req.body;
 
   try {
-    const jobExists = await Job.findById(job);
+    const jobExists = await Job.findById(job).populate("organization");
     if (!jobExists) {
       if (req.file) fs.unlinkSync(req.file.path);
       return res.status(404).json({ message: "Job not found", success: false });
@@ -71,6 +75,7 @@ export const applyForJob = async (req, res) => {
     const jobApplication = new JobApplication({
       job,
       candidate: req.user._id,
+      organization: jobExists.organization._id,
       cv: req.file.path,
       coverLetter,
     });
