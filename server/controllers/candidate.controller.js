@@ -20,7 +20,7 @@ export const getJobs = async (req, res) => {
       return res.status(400).json({ message: "No jobs found", success: false });
     }
 
-    res.status(200).json({ jobs, success: true });
+    res.status(200).json({ jobs, success: true, jobs });
   } catch (error) {
     res.status(500).json({ message: error.message, success: false });
   }
@@ -91,5 +91,26 @@ export const applyForJob = async (req, res) => {
     if (req.file) fs.unlinkSync(req.file.path);
     console.error("Error applying to job:", error);
     res.status(500).json({ message: "Internal server error", success: false });
+  }
+};
+
+export const getApplications = async (req, res) => {
+  try {
+    const applications = await JobApplication.find({
+      candidate: req.user._id,
+    }).populate("job", "title salary description");
+    if (!applications || applications.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No applications found", success: false });
+    }
+
+    return res.status(200).json({
+      message: "Applications fetched successfully",
+      success: true,
+      applications,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, success: false });
   }
 };

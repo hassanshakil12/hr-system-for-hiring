@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import UserContext from "../../context/UserContext.js";
 import "./css/Login.css";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
@@ -12,13 +13,13 @@ const Login = () => {
     password: "",
     entityType: "",
   });
-
+  const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   const handleOnChange = (e) => {
     try {
       setUserData({ ...userData, [e.target.name]: e.target.value });
-      console.log(userData);
+      // console.log(userData);
     } catch (error) {
       console.error(error);
     }
@@ -27,8 +28,10 @@ const Login = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     try {
-      await userLogin(userData);
-      alert("User logged in Successfully");
+      const response = await userLogin(userData);
+      console.log(response);
+      localStorage.setItem("token", response.data.jwtToken);
+      setUser(response.data.user);
       navigate("/");
     } catch (error) {
       console.error(error);

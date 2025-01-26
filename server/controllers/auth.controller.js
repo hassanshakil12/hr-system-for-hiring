@@ -19,13 +19,27 @@ const getModel = (entityType) => {
   }
 };
 
-const getUser = (req, res) => {
+const getUser = async (req, res) => {
   try {
-    console.log("Hello World", req.user);
-    res.status(200).json({ message: `All good` });
+    if (!req.user || !req.user._id) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: No user data found", success: false });
+    }
+
+    const user = await getModel(req.user.entityType).findById(req.user._id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found", success: false });
+    }
+
+    return res
+      .status(200)
+      .json({ message: `All good`, success: true, user });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Server Not Responding" });
+    return res.status(500).json({ message: "Server Not Responding" });
   }
 };
 
@@ -57,17 +71,16 @@ const registerUser = async (req, res) => {
       password: hashedPassword,
     });
 
-    res
+    return res
       .status(201)
       .json({ message: `Registeration Successful ${newUser}`, success: true });
   } catch (error) {
-    res.status(500).json({ message: error.message, success: false });
+    return res.status(500).json({ message: error.message, success: false });
   }
 };
 
 const SignInUser = async (req, res) => {
   const { email, password, entityType } = req.body;
-  // const Model = User;
   const Model = getModel(entityType);
   const errMsg = "Login Failed!!! Email/Password is incorrect...";
 
@@ -87,50 +100,76 @@ const SignInUser = async (req, res) => {
         success: false,
       });
     }
+
+    if (user.isOnline === true) {
+      return res
+        .status(403)
+        .json({ message: "user already logged in", success: false });
+    }
+
+    const payload = {
+      _id: user._id,
+      entityType: user.entityType,
+      username: user.username,
+      email: user.email,
+    };
+
     const JWTSecret = process.env.JWT_SECRET || "localhost";
+    const jwtToken = jwt.sign(payload, JWTSecret, {
+      expiresIn: "5d",
+    });
 
-    const jwtToken = jwt.sign(
-      {
-        username: user.username,
-        email: user.email,
-        _id: user._id,
-        entityType: user.entityType,
-      },
-      JWTSecret,
-      {
-        expiresIn: "24h",
-      }
-    );
+    user.isOnline = true;
+    await user.save();
 
-    res.status(201).json({
+    return res.status(201).json({
       message: `Login Successful`,
       success: true,
       jwtToken,
-      _id: user._id,
-      email,
-      username: user.username,
-      entityType: user.entityType,
+      user,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message, success: false });
+    return res.status(500).json({ message: error.message, success: false });
   }
 };
 
 const logoutUser = async (req, res) => {
   try {
-    req.session.destroy((err) => {
-      if (err) {
-        console.error(err);
-        return res
-          .status(500)
-          .json({ message: "Logout failed!", success: false });
-      }
-      
-      res.clearCookie("connect.sid");
-      res.status(200).json({ message: "Logout successful!", success: true });
-    });
+    if (!req.user || !req.user._id) {
+      return res
+        .status(401)
+        .json({ message: "Unauthorized: No user data found", success: false });
+    }
+
+    const Model = getModel(req.user.entityType);
+    if (!Model) {
+      return res
+        .status(400)
+        .json({ message: "Invalid entity type", success: false });
+    }
+
+    const user = await Model.findById(req.user._id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found", success: false });
+    }
+
+    if (user.isOnline === false) {
+      return res
+        .status(403)
+        .json({ message: "User already logged out", success: false });
+    }
+
+    user.isOnline = false;
+    await user.save();
+
+    return res
+      .status(204)
+      .json({ message: "User logged out successfully", success: true });
   } catch (error) {
-    res.status(500).json({ message: error.message, success: false });
+    // Handle unexpected errors
+    return res.status(500).json({ message: error.message, success: false });
   }
 };
 
@@ -146,7 +185,7 @@ const sendEmailOtp = async (req, res) => {
       .status(200)
       .json({ message: `OTP sent successfully`, success: true });
   } catch (error) {
-    res.status(500).json({ message: error.message, success: false });
+    return res.status(500).json({ message: error.message, success: false });
   }
 };
 

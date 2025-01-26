@@ -15,16 +15,24 @@ import {
   Settings,
   Login,
   Register,
+  Applications,
 } from "./pages";
-import { Navbar, SearchBar, ProfileCard } from "./components";
+import {
+  Navbar,
+  SearchBar,
+  ProfileCard,
+  ProtectedRoutes,
+  RestrictedRoutes,
+} from "./components";
+import UserContextProvider from "./context/UserContextProvider.jsx";
 
 const App = () => {
   return (
-    <>
+    <UserContextProvider>
       <Router>
         <NavigationRoutes />
       </Router>
-    </>
+    </UserContextProvider>
   );
 };
 
@@ -36,18 +44,75 @@ const NavigationRoutes = () => {
       {!noNavigationPaths.includes(location.pathname) && <Navbar />}
       <div className="app-layout">
         <div className="app-header">
-          <SearchBar />
-          <ProfileCard />
+          {!noNavigationPaths.includes(location.pathname) && <SearchBar />}
+          {!noNavigationPaths.includes(location.pathname) && <ProfileCard />}
         </div>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/feed" element={<Feed />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/Search" element={<Search />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route
+            path="/feed"
+            element={
+              <ProtectedRoutes>
+                <Feed />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoutes>
+                <Dashboard />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/applications"
+            element={
+              <ProtectedRoutes>
+                <Applications />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/Search"
+            element={
+              <ProtectedRoutes>
+                <Search />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoutes>
+                <Profile />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoutes>
+                <Settings />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <RestrictedRoutes>
+                <Login />
+              </RestrictedRoutes>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <RestrictedRoutes>
+                <Register />
+              </RestrictedRoutes>
+            }
+          />
         </Routes>
       </div>
     </div>

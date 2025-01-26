@@ -17,7 +17,7 @@ const router = express.Router();
 router.get("/", tokenAuthentication, getUser);
 router.post("/register", signUpValidation, registerUser);
 router.post("/login", signInValidation, SignInUser);
-router.post("/logout", logoutUser);
+router.post("/logout", tokenAuthentication, logoutUser);
 router.post("/send-email-otp", sendEmailOtp);
 
 export default router;

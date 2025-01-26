@@ -10,6 +10,7 @@ import { UPLOAD_DIR } from "./config/static.config.js";
 import authRoutes from "./routes/auth.routes.js";
 import organizationRoutes from "./routes/organization.routes.js";
 import candidateRoutes from "./routes/candidate.routes.js";
+import recruiterRoutes from "./routes/recruiter.routes.js";
 
 const app = express();
 
@@ -38,5 +39,6 @@ app.use(
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/candidate", candidateRoutes);
 app.use("/api/v1/organization", organizationRoutes);
+app.use("/api/v1/recruiter", recruiterRoutes);
 
 export default app;

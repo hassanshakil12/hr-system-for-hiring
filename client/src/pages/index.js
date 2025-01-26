@@ -6,3 +6,4 @@ export { default as Register } from "./auth/Register.jsx";
 export { default as Feed } from "./Feed.jsx";
 export { default as Search } from "./Search.jsx";
 export { default as Settings } from "./Settings.jsx";
+export { default as Applications } from "./candidate/Applications.jsx";
