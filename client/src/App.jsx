@@ -20,6 +20,8 @@ import {
   MyJobs,
   CreateJob,
   ApplicationHub,
+  HireRecruiter,
+  RecruitersCard,
 } from "./pages";
 import {
   Navbar,
@@ -130,6 +132,22 @@ const NavigationRoutes = () => {
             element={
               <ProtectedRoutes>
                 <ApplicationHub />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/recruiters"
+            element={
+              <ProtectedRoutes>
+                <HireRecruiter />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/hire-recruiter/:recruiterId"
+            element={
+              <ProtectedRoutes>
+                <RecruitersCard />
               </ProtectedRoutes>
             }
           />

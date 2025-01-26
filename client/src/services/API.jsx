@@ -102,9 +102,33 @@ export const createJob = (jobData) => {
 
 export const getJobApplications = () => {
   try {
-    const response = API.get("/organization/applications", {
+    const response = API.get("/application/", {
       headers: getAuthHeader(),
     });
+    return response;
+  } catch (error) {
+    console.error(error.response?.data || error);
+  }
+};
+
+export const getAllRecruiters = () => {
+  try {
+    const response = API.get("/hire/", {
+      headers: getAuthHeader(),
+    });
+    return response;
+  } catch (error) {
+    console.error(error.response?.data || error);
+  }
+};
+
+export const hireRecruiter = (userData) => {
+  try {
+    const response = API.post(
+      "/hire/onboard",
+      { userData },
+      { headers: getAuthHeader() }
+    );
     return response;
   } catch (error) {
     console.error(error.response?.data || error);

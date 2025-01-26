@@ -11,3 +11,5 @@ export { default as ApplyToJob } from "./candidate/ApplyToJob.jsx";
 export { default as MyJobs } from "./organization/MyJobs.jsx";
 export { default as CreateJob } from "./organization/CreateJob.jsx";
 export { default as ApplicationHub } from "./organization/ApplicationHub.jsx";
+export { default as HireRecruiter } from "./organization/HireRecruiter.jsx";
+export { default as RecruitersCard } from "./organization/RecruitersCard.jsx";

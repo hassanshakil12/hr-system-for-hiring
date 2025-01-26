@@ -190,11 +190,11 @@ const Navbar = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to={""}>
+                  <NavLink to={"/recruiters"}>
                     <i>
                       <PiOfficeChairBold />
                     </i>
-                    <p>Interviews</p>
+                    <p>Hire Recruiter</p>
                   </NavLink>
                 </li>
               </ul>

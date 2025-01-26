@@ -11,6 +11,8 @@ import authRoutes from "./routes/auth.routes.js";
 import organizationRoutes from "./routes/organization.routes.js";
 import candidateRoutes from "./routes/candidate.routes.js";
 import recruiterRoutes from "./routes/recruiter.routes.js";
+import applicationRoutes from "./routes/application.routes.js";
+import hireRoutes from "./routes/hire.routes.js";
 
 const app = express();
 
@@ -40,5 +42,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/candidate", candidateRoutes);
 app.use("/api/v1/organization", organizationRoutes);
 app.use("/api/v1/recruiter", recruiterRoutes);
+app.use("/api/v1/application", applicationRoutes);
+app.use("/api/v1/hire", hireRoutes);
 
 export default app;
