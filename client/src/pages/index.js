@@ -7,3 +7,7 @@ export { default as Feed } from "./Feed.jsx";
 export { default as Search } from "./Search.jsx";
 export { default as Settings } from "./Settings.jsx";
 export { default as Applications } from "./candidate/Applications.jsx";
+export { default as ApplyToJob } from "./candidate/ApplyToJob.jsx";
+export { default as MyJobs } from "./organization/MyJobs.jsx";
+export { default as CreateJob } from "./organization/CreateJob.jsx";
+export { default as ApplicationHub } from "./organization/ApplicationHub.jsx";

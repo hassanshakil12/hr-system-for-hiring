@@ -1,4 +1,5 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const JobCard = ({ data }) => {
   return (
@@ -8,6 +9,7 @@ const JobCard = ({ data }) => {
       {data.requirements.map((requirement, idx) => (
         <p key={idx}>{requirement}</p>
       ))}
+      <NavLink to={`/apply-to-job/${data._id}`}>Apply-to-job</NavLink>
     </div>
   );
 };

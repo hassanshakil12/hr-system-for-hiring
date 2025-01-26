@@ -142,7 +142,7 @@ const Navbar = () => {
               <h2>Main Menu</h2>
               <ul>
                 <li>
-                  <NavLink to={"/dashboard"}>
+                  <NavLink to={"/"}>
                     <i>
                       <RxDashboard />
                     </i>
@@ -150,7 +150,7 @@ const Navbar = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to={""}>
+                  <NavLink to={"/my-jobs"}>
                     <i>
                       <MdWorkOutline />
                     </i>
@@ -174,7 +174,7 @@ const Navbar = () => {
               <h2>Recruitment</h2>
               <ul>
                 <li>
-                  <NavLink to={""}>
+                  <NavLink to={"/create-job"}>
                     <i>
                       <MdOutlineCreateNewFolder />
                     </i>
@@ -182,7 +182,7 @@ const Navbar = () => {
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to={""}>
+                  <NavLink to={"/application-hub"}>
                     <i>
                       <FiInbox />
                     </i>

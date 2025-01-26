@@ -44,7 +44,8 @@ export const getJobById = async (req, res) => {
 };
 
 export const applyForJob = async (req, res) => {
-  const { job, coverLetter } = req.body;
+  const { job } = req.params;
+  const { coverLetter } = req.body;
 
   try {
     const jobExists = await Job.findById(job).populate("organization");

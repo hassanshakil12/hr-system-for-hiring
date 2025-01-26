@@ -23,6 +23,7 @@ const Applications = () => {
             <h3>{application.job.title}</h3>
             <h3>{application.job.salary}</h3>
             <h3>{application.cv}</h3>
+            <p>{application.createdAt}</p>
           </div>
         ))
       ) : (

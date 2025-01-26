@@ -1,7 +1,7 @@
 import express from "express";
 import { tokenAuthentication } from "../middlewares/auth.js";
 import {
-  getOrganization,
+  getOrganizationJobs,
   createJob,
   getJobById,
   getAllJobApplications,
@@ -15,7 +15,7 @@ import {
 
 const router = express.Router();
 
-router.get("/", tokenAuthentication, getOrganization);
+router.get("/jobs", tokenAuthentication, getOrganizationJobs);
 router.post("/add-job", tokenAuthentication, createJob);
 router.get("/:jobId", tokenAuthentication, getJobById);
 

@@ -16,6 +16,10 @@ import {
   Login,
   Register,
   Applications,
+  ApplyToJob,
+  MyJobs,
+  CreateJob,
+  ApplicationHub,
 } from "./pages";
 import {
   Navbar,
@@ -94,6 +98,38 @@ const NavigationRoutes = () => {
             element={
               <ProtectedRoutes>
                 <Settings />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/Apply-to-job/:job"
+            element={
+              <ProtectedRoutes>
+                <ApplyToJob />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/my-jobs"
+            element={
+              <ProtectedRoutes>
+                <MyJobs />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/create-job"
+            element={
+              <ProtectedRoutes>
+                <CreateJob />
+              </ProtectedRoutes>
+            }
+          />
+          <Route
+            path="/application-hub"
+            element={
+              <ProtectedRoutes>
+                <ApplicationHub />
               </ProtectedRoutes>
             }
           />

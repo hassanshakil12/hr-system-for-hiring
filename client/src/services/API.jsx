@@ -40,6 +40,7 @@ export const getCurrentUser = () => {
     console.error(error.response?.data || error);
   }
 };
+
 // Candidate Routes
 export const getJobs = () => {
   try {
@@ -53,6 +54,55 @@ export const getJobs = () => {
 export const getApplications = () => {
   try {
     const response = API.get("/candidate/applications", {
+      headers: getAuthHeader(),
+    });
+    return response;
+  } catch (error) {
+    console.error(error.response?.data || error);
+  }
+};
+
+export const userApplyToJob = (userData) => {
+  try {
+    const response = API.post(
+      `/candidate/apply-for-job/${userData.job}`,
+      userData.formData,
+      {
+        headers: getAuthHeader(),
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error(error.response?.data || error);
+  }
+};
+
+// Organization Routes
+export const getOrganizationJobs = () => {
+  try {
+    const response = API.get("/organization/jobs", {
+      headers: getAuthHeader(),
+    });
+    return response;
+  } catch (error) {
+    console.error(error.response?.data || error);
+  }
+};
+
+export const createJob = (jobData) => {
+  try {
+    const response = API.post("/organization/add-job", jobData, {
+      headers: getAuthHeader(),
+    });
+    return response;
+  } catch (error) {
+    console.error(error.response?.data || error);
+  }
+};
+
+export const getJobApplications = () => {
+  try {
+    const response = API.get("/organization/applications", {
       headers: getAuthHeader(),
     });
     return response;

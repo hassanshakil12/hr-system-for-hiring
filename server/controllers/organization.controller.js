@@ -4,9 +4,26 @@ import JobApplication from "../models/jobApplication.model.js";
 import Recruiter from "../models/recruiter.model.js";
 import Hiring from "../models/hiring.model.js";
 
-export const getOrganization = async (req, res) => {
+export const getOrganizationJobs = async (req, res) => {
   try {
-    res.send(req.user);
+    if (!req.user || !req.user._id) {
+      return res
+        .status(404)
+        .json({ message: "User not found", success: false });
+    }
+
+    const filter = { organization: req.user._id };
+    const jobs = await Job.find(filter);
+
+    if (!jobs || jobs.length === 0) {
+      return res.status(404).json({ message: "No jobs found", success: false });
+    }
+
+    return res.status(200).json({
+      message: "Jobs fetched successfully",
+      success: true,
+      jobs,
+    });
   } catch (error) {
     return res.status(500).json({ message: error.message, success: false });
   }
@@ -274,12 +291,10 @@ export const getRequestStatus = async (req, res) => {
       !hiringRequest.organization ||
       hiringRequest.organization.toString() !== req.user._id.toString()
     ) {
-      return res
-        .status(403)
-        .json({
-          message: "You are not authorized to access this request",
-          success: false,
-        });
+      return res.status(403).json({
+        message: "You are not authorized to access this request",
+        success: false,
+      });
     }
 
     return res.status(200).json({

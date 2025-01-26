@@ -13,7 +13,7 @@ const router = express.Router();
 router.get("/jobs", tokenAuthentication, getJobs);
 router.get("/job/:id", tokenAuthentication, getJobById);
 router.post(
-  "/apply-for-job",
+  "/apply-for-job/:job",
   tokenAuthentication,
   upload.single("cv"),
   applyForJob
