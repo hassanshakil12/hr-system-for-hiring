@@ -9,6 +9,8 @@ const ProfilePage = () => {
   const [editData, setEditData] = useState<any>({});
   const [updateError, setUpdateError] = useState("");
   const [updateLoading, setUpdateLoading] = useState(false);
+  const [editImage, setEditImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -44,19 +46,44 @@ const ProfilePage = () => {
     setEditData((prev: any) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setEditImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
   const handleUpdateProfile = async () => {
     setUpdateLoading(true);
     setUpdateError("");
 
     try {
       const token = localStorage.getItem("userAuthToken");
+      const formData = new FormData();
+
+      for (const key in editData) {
+        if (editData[key] !== undefined) {
+          formData.append(key, editData[key]);
+        }
+      }
+
+      if (editImage) {
+        formData.append("image", editImage);
+      }
+
       const res = await axios.put(
         "http://localhost:3012/api/v1/common/update-profile",
-        editData,
+        formData,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
+
+      console.log("Update response:", res);
 
       if (res.data.status) {
         setProfile(res.data.data);
@@ -86,6 +113,8 @@ const ProfilePage = () => {
       </div>
     );
   }
+
+  const isOrg = profile.role === "organization";
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-100 flex justify-center items-start font-sans py-10 px-4">
@@ -133,8 +162,12 @@ const ProfilePage = () => {
           </ProfileSection>
 
           <ProfileSection title="Basic Information">
-            <InfoRow label="Gender" value={profile.gender || "N/A"} />
-            <InfoRow label="Age" value={profile.age?.toString() || "N/A"} />
+            {!isOrg && (
+              <InfoRow label="Gender" value={profile.gender || "N/A"} />
+            )}
+            {!isOrg && (
+              <InfoRow label="Age" value={profile.age?.toString() || "N/A"} />
+            )}
             <InfoRow
               label="Status"
               value={profile.isActive ? "Active" : "Inactive"}
@@ -146,6 +179,7 @@ const ProfilePage = () => {
           <button
             onClick={() => {
               setEditData(profile);
+              setImagePreview(`http://localhost:3012/${profile.image}`);
               setShowEdit(true);
             }}
             className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-full shadow transition"
@@ -154,9 +188,9 @@ const ProfilePage = () => {
           </button>
         </div>
 
-        {/* Modal */}
+        {/* Edit Modal */}
         {showEdit && (
-          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50">
+          <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-999999">
             <div className="bg-white p-6 rounded-xl w-full max-w-lg space-y-4 shadow-xl">
               <h2 className="text-xl font-semibold text-gray-700 mb-2">
                 Edit Profile
@@ -165,6 +199,29 @@ const ProfilePage = () => {
                 <p className="text-red-500 text-sm">{updateError}</p>
               )}
 
+              {/* Image Upload */}
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Profile Image
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="w-full border border-gray-300 rounded-md p-2 bg-gray-50"
+                />
+                {imagePreview && (
+                  <div className="flex justify-center pt-2">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="h-24 w-24 object-cover rounded-full border border-gray-300"
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Text Inputs */}
               {[
                 "fullName",
                 "username",
@@ -172,7 +229,6 @@ const ProfilePage = () => {
                 "phoneNumber",
                 "address",
                 "bio",
-                "age",
               ].map((field) => (
                 <input
                   key={field}
@@ -185,17 +241,30 @@ const ProfilePage = () => {
                 />
               ))}
 
-              <select
-                name="gender"
-                value={editData.gender || ""}
-                onChange={handleEditChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-50"
-              >
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
+              {!isOrg && (
+                <>
+                  <input
+                    type="text"
+                    name="age"
+                    placeholder="Age"
+                    value={editData.age || ""}
+                    onChange={handleEditChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-50 focus:outline-none"
+                  />
+
+                  <select
+                    name="gender"
+                    value={editData.gender || ""}
+                    onChange={handleEditChange}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md bg-gray-50"
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </>
+              )}
 
               <div className="flex justify-end gap-2">
                 <button
